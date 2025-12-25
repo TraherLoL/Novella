@@ -1,3 +1,223 @@
-<Solution>
-  <Project Path="ConsoleApp1/ConsoleApp1.csproj" />
-</Solution>
+using System;
+using System.Collections.Generic;
+
+namespace InteractiveNovel
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            NovelGame game = new NovelGame();
+            game.Start();
+        }
+    }
+
+    class NovelGame
+    {
+        private int currentStep = 1;
+        private bool isRunning = true;
+        private Dictionary<int, string> endings = new Dictionary<int, string>
+        {
+            {101, "Вы нашли сокровище и стали легендой! (Концовка: Богатство)"},
+            {102, "Вы обрели вечную мудрость, но остались в библиотеке навсегда. (Концовка: Просветление)"},
+            {103, "Вы погибли от рук древнего стража. (Концовка: Гибель)"},
+            {104, "Вы сбежали и вернулись к обычной жизни. (Концовка: Бегство)"},
+            {105, "Вы стали правителем таинственного города. (Концовка: Власть)"}
+        };
+
+        public void Start()
+        {
+            Console.WriteLine("=== ТАИНСТВЕННЫЙ ОСТРОВ ===");
+            Console.WriteLine("Нажмите Enter для продолжения...");
+            Console.ReadLine();
+
+            while (isRunning)
+            {
+                ShowStep(currentStep);
+                ProcessChoice();
+            }
+        }
+
+        private void ShowStep(int step)
+        {
+            Console.Clear();
+            Console.WriteLine($"Шаг {step}/15");
+            Console.WriteLine("====================");
+
+            switch (step)
+            {
+                case 1:
+                    Console.WriteLine("Вы просыпаетесь на незнакомом берегу.");
+                    Console.WriteLine("Вокруг только песок и пальмы.");
+                    Console.WriteLine("1. Осмотреть местность");
+                    Console.WriteLine("2. Пойти вглубь острова");
+                    break;
+
+                case 2:
+                    Console.WriteLine("Вы видите старый корабль на рифах.");
+                    Console.WriteLine("1. Исследовать корабль");
+                    Console.WriteLine("2. Обойти корабль");
+                    break;
+
+                case 3:
+                    Console.WriteLine("На корабле вы находите карту.");
+                    Console.WriteLine("1. Взять карту");
+                    Console.WriteLine("2. Оставить карту");
+                    break;
+
+                case 4:
+                    Console.WriteLine("Карта указывает на пещеру в горах.");
+                    Console.WriteLine("1. Отправиться к пещере");
+                    Console.WriteLine("2. Игнорировать карту");
+                    break;
+
+                case 5:
+                    Console.WriteLine("По пути вы встречаете дикого зверя.");
+                    Console.WriteLine("1. Попытаться прогнать");
+                    Console.WriteLine("2. Спрятаться");
+                    break;
+
+                case 6:
+                    Console.WriteLine("Вы находите древний храм.");
+                    Console.WriteLine("1. Войти в храм");
+                    Console.WriteLine("2. Остаться снаружи");
+                    break;
+
+                case 7:
+                    Console.WriteLine("Внутри три двери с символами.");
+                    Console.WriteLine("1. Дверь с солнцем");
+                    Console.WriteLine("2. Дверь с луной");
+                    Console.WriteLine("3. Дверь со звездами");
+                    break;
+
+                case 8:
+                    Console.WriteLine("За дверью - библиотека древних свитков.");
+                    Console.WriteLine("1. Изучить свитки");
+                    Console.WriteLine("2. Пройти дальше");
+                    break;
+
+                case 9:
+                    Console.WriteLine("Вы находите механизм с рычагами.");
+                    Console.WriteLine("1. Потянуть левый рычаг");
+                    Console.WriteLine("2. Потянуть правый рычаг");
+                    break;
+
+                case 10:
+                    Console.WriteLine("Открывается секретный проход.");
+                    Console.WriteLine("1. Спуститься вниз");
+                    Console.WriteLine("2. Вернуться");
+                    break;
+
+                case 11:
+                    Console.WriteLine("Перед вами зал с саркофагом.");
+                    Console.WriteLine("1. Открыть саркофаг");
+                    Console.WriteLine("2. Искать другой выход");
+                    break;
+
+                case 12:
+                    Console.WriteLine("Вы видите свет в конце туннеля.");
+                    Console.WriteLine("1. Последовать к свету");
+                    Console.WriteLine("2. Остаться в зале");
+                    break;
+
+                case 13:
+                    Console.WriteLine("Вы находите древний артефакт.");
+                    Console.WriteLine("1. Взять артефакт");
+                    Console.WriteLine("2. Не трогать");
+                    break;
+
+                case 14:
+                    Console.WriteLine("Страж артефакта пробуждается.");
+                    Console.WriteLine("1. Сражаться");
+                    Console.WriteLine("2. Убежать");
+                    break;
+
+                case 15:
+                    Console.WriteLine("Вы выходите к подземному городу.");
+                    Console.WriteLine("1. Исследовать город");
+                    Console.WriteLine("2. Найти выход на поверхность");
+                    break;
+            }
+        }
+
+        private void ProcessChoice()
+        {
+            Console.Write("\nВаш выбор: ");
+            string input = Console.ReadLine();
+
+            if (!int.TryParse(input, out int choice) || choice < 1 || choice > 3)
+            {
+                Console.WriteLine("Неверный ввод!");
+                return;
+            }
+
+            // Логика переходов между шагами
+            switch (currentStep)
+            {
+                case 1:
+                    currentStep = 2;
+                    break;
+                case 2:
+                    currentStep = choice == 1 ? 3 : 4;
+                    break;
+                case 3:
+                    currentStep = choice == 1 ? 4 : 5;
+                    break;
+                case 4:
+                    currentStep = choice == 1 ? 5 : 8;
+                    break;
+                case 5:
+                    currentStep = choice == 1 ? 7 : 6;
+                    break;
+                case 6:
+                    currentStep = choice == 1 ? 7 : 9;
+                    break;
+                case 7:
+                    if (choice == 1) currentStep = 8;
+                    else if (choice == 2) currentStep = 10;
+                    else currentStep = 11;
+                    break;
+                case 8:
+                    if (choice == 1) ShowEnding(102);
+                    else currentStep = 9;
+                    break;
+                case 9:
+                    if (choice == 1) ShowEnding(103);
+                    else currentStep = 10;
+                    break;
+                case 10:
+                    currentStep = choice == 1 ? 11 : 13;
+                    break;
+                case 11:
+                    if (choice == 1) ShowEnding(101);
+                    else currentStep = 12;
+                    break;
+                case 12:
+                    currentStep = choice == 1 ? 13 : 14;
+                    break;
+                case 13:
+                    currentStep = choice == 1 ? 14 : 15;
+                    break;
+                case 14:
+                    if (choice == 1) ShowEnding(105);
+                    else ShowEnding(104);
+                    break;
+                case 15:
+                    if (choice == 1) ShowEnding(105);
+                    else ShowEnding(104);
+                    break;
+            }
+        }
+
+        private void ShowEnding(int endingId)
+        {
+            Console.Clear();
+            Console.WriteLine("=== КОНЕЦ ИСТОРИИ ===");
+            Console.WriteLine(endings[endingId]);
+            Console.WriteLine("\nСпасибо за игру!");
+            Console.WriteLine("Нажмите любую клавишу для выхода...");
+            Console.ReadKey();
+            isRunning = false;
+        }
+    }
+}
